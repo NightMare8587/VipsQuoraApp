@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "751537323583",
+    "project_id": "vips-quora-app",
+    "storage_bucket": "vips-quora-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751537323583:android:0df8fc4466c0ec8ebec28a",
+        "android_client_info": {
+          "package_name": "com.example.vipsquoraapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751537323583-mhepseripg9fod1q864s9dq5cuhvb09g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzK8YNkHJNNAbEZxBX1KdVhnFG_afGoQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751537323583-mhepseripg9fod1q864s9dq5cuhvb09g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
