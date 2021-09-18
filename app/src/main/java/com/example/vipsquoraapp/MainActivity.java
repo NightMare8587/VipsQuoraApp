@@ -24,6 +24,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth loginAuth = FirebaseAuth.getInstance();
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    FirebaseUser currentUser;
+    DatabaseReference reference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +50,17 @@ public class MainActivity extends AppCompatActivity {
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         sharedPreferences = getSharedPreferences("AccountInfo",MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference().getRoot();
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("751537323583-80p42mrn730pb1ja4q3ppsn1iaoe8fbj.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
+
+        if(currentUser != null){
+            Toast.makeText(this, "Kaaaaalu", Toast.LENGTH_SHORT).show();
+        }
+
         client = GoogleSignIn.getClient(MainActivity.this,gso);
 
 
@@ -85,11 +99,28 @@ public class MainActivity extends AppCompatActivity {
     private void createFirebaseAuthID(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         loginAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                .addOnCompleteListener(this, task -> {
+                    loginAuth = FirebaseAuth.getInstance();
+                    FirebaseUser user = loginAuth.getCurrentUser();
+                    assert user != null;
+                    loginAuth.updateCurrentUser(user);
 
-                    }
+                    reference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(!snapshot.hasChild(Objects.requireNonNull(loginAuth.getUid()))){
+//                                        reference.child("Users").child(Objects.requireNonNull(loginAuth.getUid())).setValue(user);
+                                reference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(user.getUid());
+                                GoogleSignInDB googleSignInDB = new GoogleSignInDB(account.getDisplayName(),account.getEmail());
+                                reference.setValue(googleSignInDB);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 });
     }
 
@@ -97,13 +128,14 @@ public class MainActivity extends AppCompatActivity {
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if (acct != null) {
             String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
             String personFamilyName = acct.getFamilyName();
             String personEmail = acct.getEmail();
             String personId = acct.getId();
             Uri personPhoto = acct.getPhotoUrl();
+            String photoUrl = String.valueOf(personPhoto);
             editor.putString("email",personEmail);
             editor.putString("name",personName);
+            editor.putString("photoUrl",personPhoto.toString());
             editor.apply();
             Log.i("info",personName+ " " + personEmail + " " + personFamilyName);
         }
