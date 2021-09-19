@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VipsQuoraApp">
         <activity
+            android:name=".Threads.CreateThread"
+            android:exported="true" />
+        <activity
             android:name=".Account.MyAccount"
             android:exported="true" />
         <activity

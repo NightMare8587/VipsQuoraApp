@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                             if(!snapshot.hasChild(Objects.requireNonNull(loginAuth.getUid()))){
 //                                        reference.child("Users").child(Objects.requireNonNull(loginAuth.getUid())).setValue(user);
                                 reference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(user.getUid());
-                                GoogleSignInDB googleSignInDB = new GoogleSignInDB(account.getDisplayName(),account.getEmail());
+                                GoogleSignInDB googleSignInDB = new GoogleSignInDB(account.getDisplayName(),account.getEmail(),"no");
                                 reference.setValue(googleSignInDB);
                             }
                         }
