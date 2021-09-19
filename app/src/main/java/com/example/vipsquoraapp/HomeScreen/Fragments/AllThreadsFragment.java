@@ -1,5 +1,6 @@
 package com.example.vipsquoraapp.HomeScreen.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,17 +86,17 @@ public class AllThreadsFragment extends Fragment {
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                updateChild();
+                updateChild(view.getContext());
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                updateChild();
+                updateChild(view.getContext());
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                updateChild();
+                updateChild(view.getContext());
             }
 
             @Override
@@ -110,7 +111,7 @@ public class AllThreadsFragment extends Fragment {
         });
     }
 
-    private void updateChild() {
+    private void updateChild(Context context) {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -130,7 +131,7 @@ public class AllThreadsFragment extends Fragment {
                         authID.add(String.valueOf(dataSnapshot.child("authID").getValue()));
                     }
 
-                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setAdapter(new ThreadCardView(title,likesCount,totalComments,createdBy,authID,threadID));
                 }else{
                     title.clear();
@@ -139,7 +140,7 @@ public class AllThreadsFragment extends Fragment {
                     totalComments.clear();
                     createdBy.clear();
                     authID.clear();
-                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setAdapter(new ThreadCardView(title,likesCount,totalComments,createdBy,authID,threadID));
                 }
             }
