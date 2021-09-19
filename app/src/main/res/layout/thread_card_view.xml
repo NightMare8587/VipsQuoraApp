@@ -23,6 +23,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="15dp"
+                android:id="@+id/likeButtonCard"
                 android:text="Like"
                 android:background="@null"
                 android:drawableStart="@drawable/ic_baseline_thumb_up_24"
@@ -30,6 +31,7 @@
 
             <Button
                 android:layout_width="wrap_content"
+                android:id="@+id/dislikeButtonCard"
                 android:drawableStart="@drawable/ic_baseline_thumb_down_24"
                 android:layout_marginLeft="15dp"
                 android:background="@null"
@@ -38,6 +40,7 @@
 
             <Button
                 android:layout_width="wrap_content"
+                android:id="@+id/commentButtonCard"
                 android:drawableStart="@drawable/ic_baseline_comment_24"
                 android:layout_marginLeft="15dp"
                 android:background="@null"
@@ -45,6 +48,7 @@
                 android:layout_height="wrap_content"/>
 
             <Button
+                android:id="@+id/reportButtonCard"
                 android:layout_width="wrap_content"
                 android:drawableStart="@drawable/ic_baseline_report_24"
                 android:layout_marginLeft="25dp"

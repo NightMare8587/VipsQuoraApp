@@ -3,6 +3,7 @@ package com.example.vipsquoraapp.HomeScreen.Fragments;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,16 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vipsquoraapp.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ThreadCardView extends RecyclerView.Adapter<ThreadCardView.Holder> {
-    List<String> title = new ArrayList<>();
-    List<String> likesCount = new ArrayList<>();
-    List<String> totalComments = new ArrayList<>();
-    List<String> createdBy = new ArrayList<>();
-    List<String> authID = new ArrayList<>();
-    List<String> threadID = new ArrayList<>();
+    List<String> title;
+    List<String> likesCount;
+    List<String> totalComments;
+    List<String> createdBy;
+    List<String> authID;
+    List<String> threadID;
 
     public ThreadCardView(List<String> title, List<String> likesCount, List<String> totalComments, List<String> createdBy, List<String> authID, List<String> threadID) {
         this.title = title;
@@ -53,11 +53,17 @@ public class ThreadCardView extends RecyclerView.Adapter<ThreadCardView.Holder> 
     public class Holder extends RecyclerView.ViewHolder{
         CardView cardView;
         TextView title,createdByText;
+        Button like,dislike,comment,report;
         public Holder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.titleCardView);
             cardView = itemView.findViewById(R.id.threadCardView);
             createdByText = itemView.findViewById(R.id.createdByTestVieewCard);
+
+            like = itemView.findViewById(R.id.likeButtonCard);
+            dislike = itemView.findViewById(R.id.dislikeButtonCard);
+            comment = itemView.findViewById(R.id.commentButtonCard);
+            report = itemView.findViewById(R.id.reportButtonCard);
         }
     }
 }
