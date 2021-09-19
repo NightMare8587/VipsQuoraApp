@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vipsquoraapp.R;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +47,12 @@ public class AllThreadsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
+                    title.clear();
+                    likesCount.clear();
+                    threadID.clear();
+                    totalComments.clear();
+                    createdBy.clear();
+                    authID.clear();
                     for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                         threadID.add(String.valueOf(dataSnapshot.getKey()));
                         title.add(String.valueOf(dataSnapshot.child("title").getValue()));
@@ -56,6 +63,83 @@ public class AllThreadsFragment extends Fragment {
                     }
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                    recyclerView.setAdapter(new ThreadCardView(title,likesCount,totalComments,createdBy,authID,threadID));
+                }else{
+                    title.clear();
+                    likesCount.clear();
+                    threadID.clear();
+                    totalComments.clear();
+                    createdBy.clear();
+                    authID.clear();
+                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    recyclerView.setAdapter(new ThreadCardView(title,likesCount,totalComments,createdBy,authID,threadID));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        databaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                updateChild();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                updateChild();
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                updateChild();
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void updateChild() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    title.clear();
+                    likesCount.clear();
+                    threadID.clear();
+                    totalComments.clear();
+                    createdBy.clear();
+                    authID.clear();
+                    for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                        threadID.add(String.valueOf(dataSnapshot.getKey()));
+                        title.add(String.valueOf(dataSnapshot.child("title").getValue()));
+                        likesCount.add(String.valueOf(dataSnapshot.child("likes").getValue()));
+                        createdBy.add(String.valueOf(dataSnapshot.child("createdBy").getValue()));
+                        totalComments.add(String.valueOf(dataSnapshot.child("comments").getValue()));
+                        authID.add(String.valueOf(dataSnapshot.child("authID").getValue()));
+                    }
+
+                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    recyclerView.setAdapter(new ThreadCardView(title,likesCount,totalComments,createdBy,authID,threadID));
+                }else{
+                    title.clear();
+                    likesCount.clear();
+                    threadID.clear();
+                    totalComments.clear();
+                    createdBy.clear();
+                    authID.clear();
+                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                     recyclerView.setAdapter(new ThreadCardView(title,likesCount,totalComments,createdBy,authID,threadID));
                 }
             }

@@ -15,10 +15,15 @@ import com.example.vipsquoraapp.Account.MyAccount;
 import com.example.vipsquoraapp.HomeScreen.Fragments.MyAdapter;
 import com.example.vipsquoraapp.R;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.Objects;
 
 public class Home extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager2;
+    FirebaseAuth auth = FirebaseAuth.getInstance();
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +37,7 @@ public class Home extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Following"));
         tabLayout.addTab(tabLayout.newTab().setText("All Threads"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
+        FirebaseMessaging.getInstance().subscribeToTopic(Objects.requireNonNull(auth.getUid()));
         final MyAdapter adapter = new MyAdapter(this,getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager2.setAdapter(adapter);
 
