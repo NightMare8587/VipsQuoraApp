@@ -3,10 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/activity_home.xml" value="0.245018115942029" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/all_threads_fragment.xml" value="0.245018115942029" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/following_fragment.xml" value="0.245018115942029" />
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/notification.xml" value="0.245018115942029" />
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/menu/menu.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/menu/notification.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

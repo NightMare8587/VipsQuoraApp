@@ -1,12 +1,17 @@
 package com.example.vipsquoraapp.HomeScreen;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import com.example.vipsquoraapp.Account.MyAccount;
 import com.example.vipsquoraapp.HomeScreen.Fragments.MyAdapter;
 import com.example.vipsquoraapp.R;
 import com.google.android.material.tabs.TabLayout;
@@ -49,5 +54,21 @@ public class Home extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.notification,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.notification)
+            startActivity(new Intent(Home.this, MyAccount.class));
+
+        return super.onOptionsItemSelected(item);
     }
 }
