@@ -40,8 +40,14 @@ public class MyAccount extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(Objects.requireNonNull(auth.getUid()));
 
+
         imageView = findViewById(R.id.homeImageView);
         aSwitch = findViewById(R.id.anonomousProfile);
+        if(sharedPreferences.contains("anonymous")){
+            if(sharedPreferences.getString("anonymous","").equals("yes"))
+                aSwitch.setChecked(true);
+        }
+
         email.setText(sharedPreferences.getString("email",""));
         name.setText(sharedPreferences.getString("name",""));
         editor = sharedPreferences.edit();

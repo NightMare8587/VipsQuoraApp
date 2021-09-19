@@ -15,7 +15,9 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="Enter Query Here ( Max length 200)"
         android:inputType="textMultiLine"
+        android:maxLength="200"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
