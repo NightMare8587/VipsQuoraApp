@@ -1,18 +1,30 @@
 package com.example.vipsquoraapp.HomeScreen.Fragments;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vipsquoraapp.R;
+import com.example.vipsquoraapp.Threads.ChatInThread;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ThreadCardView extends RecyclerView.Adapter<ThreadCardView.Holder> {
     List<String> title;
@@ -40,9 +52,46 @@ public class ThreadCardView extends RecyclerView.Adapter<ThreadCardView.Holder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Holder holder, int position) {
+    public void onBindViewHolder(@NonNull Holder holder, @SuppressLint("RecyclerView") int position) {
         holder.title.setText(title.get(position));
         holder.createdByText.setText(createdBy.get(position));
+
+        holder.like.setOnClickListener(click -> {
+            FirebaseMessaging.getInstance().subscribeToTopic(Objects.requireNonNull(threadID.get(position)));
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(Objects.requireNonNull(auth.getUid()));
+            databaseReference.child("Following Threads").child(threadID.get(position)).child("follow").setValue("yes");
+            Toast.makeText(click.getContext(), "Thread Followed", Toast.LENGTH_SHORT).show();
+        });
+
+        holder.dislike.setOnClickListener(click -> {
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(Objects.requireNonNull(auth.getUid()));
+            databaseReference.child("Following Threads").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        if(snapshot.hasChild(threadID.get(position))){
+                            FirebaseMessaging.getInstance().unsubscribeFromTopic(Objects.requireNonNull(threadID.get(position)));
+                            databaseReference.child("Following Threads").child(threadID.get(position)).removeValue();
+                            Toast.makeText(click.getContext(), "Thread Unfollowed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        });
+
+        holder.cardView.setOnClickListener(click -> {
+            Intent intent = new Intent(click.getContext(), ChatInThread.class);
+            intent.putExtra("threadId",threadID.get(position));
+            intent.putExtra("createdBy",createdBy.get(position));
+            click.getContext().startActivity(intent);
+        });
     }
 
     @Override
