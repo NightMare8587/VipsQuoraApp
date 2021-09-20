@@ -90,7 +90,18 @@ public class ThreadCardView extends RecyclerView.Adapter<ThreadCardView.Holder> 
 
         holder.cardView.setOnClickListener(click -> {
             Intent intent = new Intent(click.getContext(), ChatInThread.class);
-            intent.putExtra("threadId",threadID.get(position));
+            intent.putExtra("title",title.get(position));
+            intent.putExtra("threadID",threadID.get(position));
+            intent.putExtra("authID",authID.get(position));
+            intent.putExtra("createdBy",createdBy.get(position));
+            click.getContext().startActivity(intent);
+        });
+
+        holder.comment.setOnClickListener(click -> {
+            Intent intent = new Intent(click.getContext(), ChatInThread.class);
+            intent.putExtra("title",title.get(position));
+            intent.putExtra("threadID",threadID.get(position));
+            intent.putExtra("authID",authID.get(position));
             intent.putExtra("createdBy",createdBy.get(position));
             click.getContext().startActivity(intent);
         });

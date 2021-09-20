@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ public class FollowingFragment extends Fragment {
     FirebaseAuth auth = FirebaseAuth.getInstance();
     List<String> title = new ArrayList<>();
     List<String> threadID = new ArrayList<>();
+    ProgressBar progressBar;
     List<String> authId = new ArrayList<>();
     List<String> createdBy = new ArrayList<>();
     RecyclerView recyclerView;
@@ -42,6 +44,7 @@ public class FollowingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         floatingActionButton = view.findViewById(R.id.floatingActionButton);
         recyclerView = view.findViewById(R.id.followingFragRecyclerView);
+        progressBar = view.findViewById(R.id.followingProgressBar);
         databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(Objects.requireNonNull(auth.getUid()));
         databaseReference.child("Following Threads").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -57,6 +60,7 @@ public class FollowingFragment extends Fragment {
                         authId.add(String.valueOf(dataSnapshot.child("authID").getValue()));
                         threadID.add(String.valueOf(dataSnapshot.child("threadID").getValue()));
                     }
+                    progressBar.setVisibility(View.INVISIBLE);
                     recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
                     recyclerView.setAdapter(new FollowThreadAdapter(createdBy,authId,threadID,title));
                 }else{
@@ -64,6 +68,7 @@ public class FollowingFragment extends Fragment {
                     createdBy.clear();
                     authId.clear();
                     threadID.clear();
+                    progressBar.setVisibility(View.INVISIBLE);
                     recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
                     recyclerView.setAdapter(new FollowThreadAdapter(createdBy,authId,threadID,title));
                 }
@@ -110,6 +115,7 @@ public class FollowingFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
+                    progressBar.setVisibility(View.VISIBLE);
                     title.clear();
                     createdBy.clear();
                     authId.clear();
@@ -120,6 +126,7 @@ public class FollowingFragment extends Fragment {
                         authId.add(String.valueOf(dataSnapshot.child("authID").getValue()));
                         threadID.add(String.valueOf(dataSnapshot.child("threadID").getValue()));
                     }
+                    progressBar.setVisibility(View.INVISIBLE);
                     recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                     recyclerView.setAdapter(new FollowThreadAdapter(createdBy,authId,threadID,title));
                 }else{
@@ -127,6 +134,7 @@ public class FollowingFragment extends Fragment {
                     createdBy.clear();
                     authId.clear();
                     threadID.clear();
+                    progressBar.setVisibility(View.INVISIBLE);
                     recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                     recyclerView.setAdapter(new FollowThreadAdapter(createdBy,authId,threadID,title));
                 }

@@ -1,6 +1,7 @@
 package com.example.vipsquoraapp.Threads.FollowThreads;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vipsquoraapp.R;
+import com.example.vipsquoraapp.Threads.ChatInThread;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,6 +51,15 @@ public class FollowThreadAdapter extends RecyclerView.Adapter<FollowThreadAdapte
     public void onBindViewHolder(@NonNull Holder holder, @SuppressLint("RecyclerView") int position) {
         holder.title.setText(title.get(position));
         holder.createdBy.setText(createdBy.get(position));
+
+        holder.cardView.setOnClickListener(click -> {
+            Intent intent = new Intent(click.getContext(), ChatInThread.class);
+            intent.putExtra("title",title.get(position));
+            intent.putExtra("threadID",threadID.get(position));
+            intent.putExtra("authID",authID.get(position));
+            intent.putExtra("createdBy",createdBy.get(position));
+            click.getContext().startActivity(intent);
+        });
 
         holder.remove.setOnClickListener(click -> {
             FirebaseAuth auth = FirebaseAuth.getInstance();
