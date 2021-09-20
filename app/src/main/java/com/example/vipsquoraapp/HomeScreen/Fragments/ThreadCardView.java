@@ -14,7 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vipsquoraapp.R;
-import com.example.vipsquoraapp.Threads.ChatInThread;
+import com.example.vipsquoraapp.Threads.Chat.ChatInThread;
 import com.example.vipsquoraapp.Threads.FollowThreads.FollowThread;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;

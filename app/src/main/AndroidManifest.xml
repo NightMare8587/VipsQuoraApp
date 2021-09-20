@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VipsQuoraApp">
         <activity
-            android:name=".Threads.ChatInThread"
+            android:name=".Threads.Chat.ChatInThread"
             android:exported="true" />
         <activity
             android:name=".Threads.CreateThread"

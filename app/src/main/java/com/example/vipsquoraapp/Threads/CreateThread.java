@@ -43,7 +43,7 @@ public class CreateThread extends AppCompatActivity {
                 if(sharedPreferences.contains("anonymous")) {
                     if (sharedPreferences.getString("anonymous", "").equals("yes")) {
                         anono = true;
-                         threadClass = new ThreadClass(editText.getText().toString(), "0", "0", "anonymous", "null");
+                         threadClass = new ThreadClass(editText.getText().toString(), "0", "0", "anonymous", auth.getUid());
                     } else {
                         anono = false;
                          threadClass = new ThreadClass(editText.getText().toString(), "0", "0", sharedPreferences.getString("name", ""), auth.getUid() + "");
