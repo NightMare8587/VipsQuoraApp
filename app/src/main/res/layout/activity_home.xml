@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Vips Quora"
+        app:title="Ask Seniors"
         app:titleTextColor="#FFFFFF" />
 
     <com.google.android.material.tabs.TabLayout

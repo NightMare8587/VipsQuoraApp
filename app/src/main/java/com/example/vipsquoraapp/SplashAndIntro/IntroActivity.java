@@ -1,24 +1,22 @@
 package com.example.vipsquoraapp.SplashAndIntro;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
 import com.example.vipsquoraapp.GoogleSignInDB;
 import com.example.vipsquoraapp.HomeScreen.Home;
-import com.example.vipsquoraapp.MainActivity;
 import com.example.vipsquoraapp.R;
 import com.example.vipsquoraapp.SplashAndIntro.Fragments.FragFour;
 import com.example.vipsquoraapp.SplashAndIntro.Fragments.FragOne;
@@ -259,7 +257,7 @@ public class IntroActivity extends AppCompatActivity {
                     editorIntro.putString("intro","yes");
                     editorIntro.apply();
                     startActivity(new Intent(IntroActivity.this, Home.class));
-
+                    finish();
                 });
     }
 
