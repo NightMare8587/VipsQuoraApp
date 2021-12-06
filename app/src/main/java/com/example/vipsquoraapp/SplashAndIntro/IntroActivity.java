@@ -41,6 +41,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
+// created by lochan
+
 public class IntroActivity extends AppCompatActivity {
     FragmentManager manager;
     int count = 1;
@@ -224,7 +226,6 @@ public class IntroActivity extends AppCompatActivity {
                     FirebaseUser user = loginAuth.getCurrentUser();
                     assert user != null;
                     loginAuth.updateCurrentUser(user);
-
                     reference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -257,9 +258,12 @@ public class IntroActivity extends AppCompatActivity {
             Uri personPhoto = acct.getPhotoUrl();
             editor.putString("email",personEmail);
             editor.putString("name",personName);
+            assert personPhoto != null;
             editor.putString("photoUrl",personPhoto.toString());
             editor.apply();
             Log.i("info",personName+ " " + personEmail + " " + personFamilyName);
         }
     }
 }
+
+// end of lochan file
