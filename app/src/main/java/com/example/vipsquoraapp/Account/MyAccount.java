@@ -1,17 +1,16 @@
 package com.example.vipsquoraapp.Account;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
-
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.example.vipsquoraapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,18 +50,15 @@ public class MyAccount extends AppCompatActivity {
         email.setText(sharedPreferences.getString("email",""));
         name.setText(sharedPreferences.getString("name",""));
         editor = sharedPreferences.edit();
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    editor.putString("anonymous","yes");
-                    editor.apply();
-                    databaseReference.child("anonymous").setValue("yes");
-                }else{
-                    editor.putString("anonymous","no");
-                    editor.apply();
-                    databaseReference.child("anonymous").setValue("no");
-                }
+        aSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
+            if(b){
+                editor.putString("anonymous","yes");
+                editor.apply();
+                databaseReference.child("anonymous").setValue("yes");
+            }else{
+                editor.putString("anonymous","no");
+                editor.apply();
+                databaseReference.child("anonymous").setValue("no");
             }
         });
 
