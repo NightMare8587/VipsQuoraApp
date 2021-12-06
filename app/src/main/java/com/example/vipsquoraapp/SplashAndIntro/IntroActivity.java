@@ -88,117 +88,104 @@ public class IntroActivity extends AppCompatActivity {
                 .requestIdToken("751537323583-80p42mrn730pb1ja4q3ppsn1iaoe8fbj.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
-
-
         client = GoogleSignIn.getClient(IntroActivity.this,gso);
-
-
         signInButton.setOnClickListener(b -> {
             Intent signIn = client.getSignInIntent();
             startActivityForResult(signIn,3);
         });
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                count++;
-
-                if(count == 1){
-                    back.setVisibility(View.INVISIBLE);
-                }else
-                    back.setVisibility(View.VISIBLE);
-
-                if(count == 4){
-                    signInButton.setVisibility(View.VISIBLE);
-                    next.setVisibility(View.INVISIBLE);
-                }else {
-                    signInButton.setVisibility(View.INVISIBLE);
-                    next.setVisibility(View.VISIBLE);
-                }
-
-                switch (count){
-                    case 1:
-                        manager.beginTransaction().setCustomAnimations(
-                                R.anim.slide_in,  // enter
-                                R.anim.slide_out
-                        ).hide(active).show(fragOne).commit();
-                        active = fragOne;
-                        break;
-                    case 2:
-                        manager.beginTransaction().hide(active).setCustomAnimations(
-                                R.anim.slide_in,  // enter
-                                R.anim.slide_out
-                        ).show(fragTwo).commit();
-                        active = fragTwo;
-                        break;
-                    case 3:
-                        manager.beginTransaction().hide(active).setCustomAnimations(
-                                R.anim.slide_in,  // enter
-                                R.anim.slide_out
-                        ).show(fragThree).commit();
-                        active = fragThree;
-                        break;
-                    case 4:
-                        manager.beginTransaction().hide(active).setCustomAnimations(
-                                R.anim.slide_in,  // enter
-                                R.anim.slide_out
-                        ).show(fragFour).commit();
-                        active = fragFour;
-                        break;
-                }
+        next.setOnClickListener(view -> {
+            count++;
+            if(count == 1){
+                back.setVisibility(View.INVISIBLE);
+            }else
+                back.setVisibility(View.VISIBLE);
+            if(count == 4){
+                signInButton.setVisibility(View.VISIBLE);
+                next.setVisibility(View.INVISIBLE);
+            }else {
+                signInButton.setVisibility(View.INVISIBLE);
+                next.setVisibility(View.VISIBLE);
+            }
+            switch (count){
+                case 1:
+                    manager.beginTransaction().setCustomAnimations(
+                            R.anim.slide_in,  // enter
+                            R.anim.slide_out
+                    ).hide(active).show(fragOne).commit();
+                    active = fragOne;
+                    break;
+                case 2:
+                    manager.beginTransaction().hide(active).setCustomAnimations(
+                            R.anim.slide_in,  // enter
+                            R.anim.slide_out
+                    ).show(fragTwo).commit();
+                    active = fragTwo;
+                    break;
+                case 3:
+                    manager.beginTransaction().hide(active).setCustomAnimations(
+                            R.anim.slide_in,  // enter
+                            R.anim.slide_out
+                    ).show(fragThree).commit();
+                    active = fragThree;
+                    break;
+                case 4:
+                    manager.beginTransaction().hide(active).setCustomAnimations(
+                            R.anim.slide_in,  // enter
+                            R.anim.slide_out
+                    ).show(fragFour).commit();
+                    active = fragFour;
+                    break;
             }
         });
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                count--;
+        back.setOnClickListener(view -> {
+            count--;
 
-                if(count == 1){
-                    back.setVisibility(View.INVISIBLE);
-                }else
-                    back.setVisibility(View.VISIBLE);
+            if(count == 1){
+                back.setVisibility(View.INVISIBLE);
+            }else
+                back.setVisibility(View.VISIBLE);
 
-                if(count == 4){
-                    signInButton.setVisibility(View.VISIBLE);
-                    next.setVisibility(View.INVISIBLE);
-                }else {
-                    signInButton.setVisibility(View.INVISIBLE);
-                    next.setVisibility(View.VISIBLE);
-                }
+            if(count == 4){
+                signInButton.setVisibility(View.VISIBLE);
+                next.setVisibility(View.INVISIBLE);
+            }else {
+                signInButton.setVisibility(View.INVISIBLE);
+                next.setVisibility(View.VISIBLE);
+            }
 
-                switch (count){
-                    case 1:
-                        manager.beginTransaction().hide(active).setCustomAnimations(
-                                R.anim.slide_out,  // enter
-                                R.anim.slide_in
-                        ).show(fragOne).commit();
-                        active = fragOne;
-                        break;
-                    case 2:
-                        manager.beginTransaction().hide(active).setCustomAnimations(
-                                R.anim.slide_out,  // enter
-                                R.anim.slide_in
-                        ).show(fragTwo).commit();
-                        active = fragTwo;
-                        break;
-                    case 3:
-                        manager.beginTransaction().hide(active).setCustomAnimations(
-                                R.anim.slide_out,  // enter
-                                R.anim.slide_in
-                        ).show(fragThree).commit();
-                        active = fragThree;
-                        break;
-                    case 4:
-                        manager.beginTransaction().hide(active).setCustomAnimations(
-                                R.anim.slide_out,  // enter
-                                R.anim.slide_in
-                        ).show(fragFour).commit();
-                        active = fragFour;
-                        break;
-
-                }
+            switch (count){
+                case 1:
+                    manager.beginTransaction().hide(active).setCustomAnimations(
+                            R.anim.slide_out,  // enter
+                            R.anim.slide_in
+                    ).show(fragOne).commit();
+                    active = fragOne;
+                    break;
+                case 2:
+                    manager.beginTransaction().hide(active).setCustomAnimations(
+                            R.anim.slide_out,  // enter
+                            R.anim.slide_in
+                    ).show(fragTwo).commit();
+                    active = fragTwo;
+                    break;
+                case 3:
+                    manager.beginTransaction().hide(active).setCustomAnimations(
+                            R.anim.slide_out,  // enter
+                            R.anim.slide_in
+                    ).show(fragThree).commit();
+                    active = fragThree;
+                    break;
+                case 4:
+                    manager.beginTransaction().hide(active).setCustomAnimations(
+                            R.anim.slide_out,  // enter
+                            R.anim.slide_in
+                    ).show(fragFour).commit();
+                    active = fragFour;
+                    break;
 
             }
+
         });
 
 
@@ -267,9 +254,7 @@ public class IntroActivity extends AppCompatActivity {
             String personName = acct.getDisplayName();
             String personFamilyName = acct.getFamilyName();
             String personEmail = acct.getEmail();
-            String personId = acct.getId();
             Uri personPhoto = acct.getPhotoUrl();
-            String photoUrl = String.valueOf(personPhoto);
             editor.putString("email",personEmail);
             editor.putString("name",personName);
             editor.putString("photoUrl",personPhoto.toString());
