@@ -1,6 +1,7 @@
 package com.example.vipsquoraapp.ProfileInfo.ChatUser;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.vipsquoraapp.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -87,6 +89,33 @@ public class ChatWithProfileUser extends AppCompatActivity {
             }
         });
 
+        databaseReference.child("messages").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                updateChat();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                updateChat();
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                updateChat();
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         sendME.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,6 +164,7 @@ public class ChatWithProfileUser extends AppCompatActivity {
                     databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(authId);
                     databaseReference.child("messages").child(Objects.requireNonNull(auth.getUid())).child(currentTime+"").setValue(chat);
                     editText.setText("");
+                    databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(Objects.requireNonNull(auth.getUid()));
 
                     updateChat();
                 }
@@ -143,5 +173,33 @@ public class ChatWithProfileUser extends AppCompatActivity {
     }
 
     private void updateChat() {
+        databaseReference.child("messages").child(authId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    message.clear();
+                    time.clear();
+                    leftOrRight.clear();
+                    sendBy.clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        sendBy.add(String.valueOf(dataSnapshot.child("senderId").getValue()));
+                        message.add(String.valueOf(dataSnapshot.child("message").getValue()));
+                        time.add(String.valueOf(dataSnapshot.child("time").getValue()));
+                        leftOrRight.add(String.valueOf(dataSnapshot.child("id").getValue()));
+                    }
+
+                    linearLayoutManager.setStackFromEnd(true);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+
+//                    recyclerView.smoothScrollToPosition(message.size()-1);
+                    recyclerView.setAdapter(new chatAdapter(message,time,leftOrRight,sendBy,auth.getUid() + ""));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

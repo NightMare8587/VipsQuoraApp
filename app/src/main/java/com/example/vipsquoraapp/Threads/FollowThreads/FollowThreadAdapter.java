@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.vipsquoraapp.Account.MyAccount;
+import com.example.vipsquoraapp.ProfileInfo.ShowUserProfile;
 import com.example.vipsquoraapp.R;
 import com.example.vipsquoraapp.Threads.Chat.ChatInThread;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +33,7 @@ public class FollowThreadAdapter extends RecyclerView.Adapter<FollowThreadAdapte
     List<String> authID;
     List<String> threadID;
     List<String> title;
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     public FollowThreadAdapter(List<String> createdBy, List<String> authID, List<String> threadID, List<String> title) {
         this.createdBy = createdBy;
@@ -59,6 +62,22 @@ public class FollowThreadAdapter extends RecyclerView.Adapter<FollowThreadAdapte
             intent.putExtra("authID",authID.get(position));
             intent.putExtra("createdBy",createdBy.get(position));
             click.getContext().startActivity(intent);
+        });
+
+        holder.createdBy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.createdBy.getText().equals("anonymous")){
+                    Toast.makeText(view.getContext(), "Can't open anonymous profile", Toast.LENGTH_SHORT).show();
+                }
+                else if(!authID.get(position).equals(String.valueOf(auth.getUid()))) {
+                    Intent intent = new Intent(view.getContext(), ShowUserProfile.class);
+                    intent.putExtra("authID",authID.get(position));
+                    view.getContext().startActivity(intent);
+                }else
+                    view.getContext().startActivity(new Intent(view.getContext(), MyAccount.class));
+
+            }
         });
 
         holder.remove.setOnClickListener(click -> {
