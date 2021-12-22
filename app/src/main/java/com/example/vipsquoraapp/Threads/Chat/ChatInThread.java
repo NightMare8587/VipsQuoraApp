@@ -23,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.vipsquoraapp.Account.MyAccount;
+import com.example.vipsquoraapp.ProfileInfo.ChatUser.ChatWithProfileUser;
 import com.example.vipsquoraapp.ProfileInfo.ShowUserProfile;
 import com.example.vipsquoraapp.R;
 import com.example.vipsquoraapp.Threads.FollowThreads.FollowThread;
@@ -46,6 +47,8 @@ import java.util.Objects;
 public class ChatInThread extends AppCompatActivity {
     String title,createdBy,threadId,authId;
     TextView createBy,name;
+    boolean containsBad = false;
+    List<String> badWords = new ArrayList<>();
     RecyclerView recyclerView;
     DatabaseReference databaseReference;
     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -64,6 +67,7 @@ public class ChatInThread extends AppCompatActivity {
         createdBy = getIntent().getStringExtra("createdBy");
         threadId = getIntent().getStringExtra("threadID");
         authId = getIntent().getStringExtra("authID");
+        initialise();
         recyclerView = findViewById(R.id.chatInThreadRecyclerView);
         SharedPreferences sharedPreferences = getSharedPreferences("AccountInfo",MODE_PRIVATE);
         addComment = findViewById(R.id.replyToChatInThread);
@@ -83,50 +87,62 @@ public class ChatInThread extends AppCompatActivity {
                     commentEdit.setError("Enter some text/comment");
 
                 }else {
-                    RequestQueue requestQueue = Volley.newRequestQueue(ChatInThread.this);
-                    JSONObject main = new JSONObject();
-                    try {
-                        main.put("to", "/topics/" + threadId);
-                        JSONObject notification = new JSONObject();
-                        notification.put("title", "Table " + "New Comment");
-                        notification.put("body", "Someone replied to thread you are following");
-                        main.put("notification", notification);
-
-                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, main, response -> {
-
-                        }, error -> Toast.makeText(getApplicationContext(), error.getLocalizedMessage() + "null", Toast.LENGTH_SHORT).show()) {
-                            @Override
-                            public Map<String, String> getHeaders() {
-                                Map<String, String> header = new HashMap<>();
-                                header.put("content-type", "application/json");
-                                header.put("authorization", "key=AAAAsigSEMs:APA91bEUF9ZFwIu84Jctci56DQd0TQOepztGOIKIBhoqf7N3ueQrkClw0xBTlWZEWyvwprXZmZgW2MNywF1pNBFpq1jFBr0CmlrJ0wygbZIBOnoZ0jP1zZC6nPxqF2MAP6iF3wuBHD2R");
-                                return header;
-                            }
-                        };
-
-                        requestQueue.add(jsonObjectRequest);
-
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), e.getLocalizedMessage() + "null", Toast.LENGTH_SHORT).show();
+                    containsBad = false;
+                    String  inputString = commentEdit.getText().toString();
+                    for(int i1=0;i1<badWords.size();i1++){
+                        String word = badWords.get(i1);
+                        if(inputString.toLowerCase().contains(word)){
+                            containsBad = true;
+                            Toast.makeText(ChatInThread.this, "We don't allow bad words in our app", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
                     }
-                    ChatClass chatClass;
-                    String generatedID = String.valueOf(System.currentTimeMillis());
-                    if(sharedPreferences.contains("anonymous")){
-                        if(sharedPreferences.getString("anonymous","").equals("yes")){
-                            chatClass = new ChatClass(commentEdit.getText().toString(),generatedID,auth.getUid(),"anonymous");
-                        }else
-                            chatClass = new ChatClass(commentEdit.getText().toString(),generatedID,auth.getUid(),sharedPreferences.getString("name",""));
-                    }else
-                        chatClass = new ChatClass(commentEdit.getText().toString(),generatedID,auth.getUid(),sharedPreferences.getString("name",""));
+                    if(!containsBad) {
+                        RequestQueue requestQueue = Volley.newRequestQueue(ChatInThread.this);
+                        JSONObject main = new JSONObject();
+                        try {
+                            main.put("to", "/topics/" + threadId);
+                            JSONObject notification = new JSONObject();
+                            notification.put("title", "Table " + "New Comment");
+                            notification.put("body", "Someone replied to thread you are following");
+                            main.put("notification", notification);
 
-                    addCommentToDB.child("comments").child(generatedID).setValue(chatClass);
-                    dialogInterface.dismiss();
-                    FirebaseMessaging.getInstance().subscribeToTopic(threadId);
-                    FirebaseAuth auth = FirebaseAuth.getInstance();
-                    FollowThread followThread = new FollowThread(title,threadId,createdBy,authId);
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(Objects.requireNonNull(auth.getUid()));
-                    databaseReference.child("Following Threads").child(threadId).setValue(followThread);
-                    Toast.makeText(click.getContext(), "Thread Followed", Toast.LENGTH_SHORT).show();
+                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, main, response -> {
+
+                            }, error -> Toast.makeText(getApplicationContext(), error.getLocalizedMessage() + "null", Toast.LENGTH_SHORT).show()) {
+                                @Override
+                                public Map<String, String> getHeaders() {
+                                    Map<String, String> header = new HashMap<>();
+                                    header.put("content-type", "application/json");
+                                    header.put("authorization", "key=AAAAsigSEMs:APA91bEUF9ZFwIu84Jctci56DQd0TQOepztGOIKIBhoqf7N3ueQrkClw0xBTlWZEWyvwprXZmZgW2MNywF1pNBFpq1jFBr0CmlrJ0wygbZIBOnoZ0jP1zZC6nPxqF2MAP6iF3wuBHD2R");
+                                    return header;
+                                }
+                            };
+
+                            requestQueue.add(jsonObjectRequest);
+
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), e.getLocalizedMessage() + "null", Toast.LENGTH_SHORT).show();
+                        }
+                        ChatClass chatClass;
+                        String generatedID = String.valueOf(System.currentTimeMillis());
+                        if (sharedPreferences.contains("anonymous")) {
+                            if (sharedPreferences.getString("anonymous", "").equals("yes")) {
+                                chatClass = new ChatClass(commentEdit.getText().toString(), generatedID, auth.getUid(), "anonymous");
+                            } else
+                                chatClass = new ChatClass(commentEdit.getText().toString(), generatedID, auth.getUid(), sharedPreferences.getString("name", ""));
+                        } else
+                            chatClass = new ChatClass(commentEdit.getText().toString(), generatedID, auth.getUid(), sharedPreferences.getString("name", ""));
+
+                        addCommentToDB.child("comments").child(generatedID).setValue(chatClass);
+                        dialogInterface.dismiss();
+                        FirebaseMessaging.getInstance().subscribeToTopic(threadId);
+                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                        FollowThread followThread = new FollowThread(title, threadId, createdBy, authId);
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(Objects.requireNonNull(auth.getUid()));
+                        databaseReference.child("Following Threads").child(threadId).setValue(followThread);
+                        Toast.makeText(click.getContext(), "Thread Followed", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }).setNegativeButton("Cancel", (dialogInterface, i) -> {
                 Toast.makeText(ChatInThread.this, "Cancelled", Toast.LENGTH_SHORT).show();
@@ -224,6 +240,9 @@ public class ChatInThread extends AppCompatActivity {
 
     }
 
+    private void checkIfBadOrNot() {
+    }
+
     private void updateChild() {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -288,5 +307,16 @@ public class ChatInThread extends AppCompatActivity {
 
             return sb.toString();
         }
+    }
+    private void initialise() {
+        badWords.add("fuck");
+        badWords.add("lodu");
+        badWords.add("chutiya");
+        badWords.add("madarchod");
+        badWords.add("bc");
+        badWords.add("mc");
+        badWords.add("bhenchod");
+        badWords.add("suar");
+        badWords.add("randi");
     }
 }
