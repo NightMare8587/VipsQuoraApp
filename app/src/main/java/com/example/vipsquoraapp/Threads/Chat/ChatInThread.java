@@ -1,6 +1,7 @@
 package com.example.vipsquoraapp.Threads.Chat;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.vipsquoraapp.Account.MyAccount;
+import com.example.vipsquoraapp.ProfileInfo.ShowUserProfile;
 import com.example.vipsquoraapp.R;
 import com.example.vipsquoraapp.Threads.FollowThreads.FollowThread;
 import com.google.firebase.auth.FirebaseAuth;
@@ -137,6 +140,19 @@ public class ChatInThread extends AppCompatActivity {
             alert.setView(linearLayout);
 
             alert.create().show();
+        });
+
+        createBy.setOnClickListener(click -> {
+            if(createBy.getText().toString().equals("anonymous")){
+                Toast.makeText(ChatInThread.this, "Can't open anonymous profile", Toast.LENGTH_SHORT).show();
+            }else if(authId.equals(String.valueOf(auth.getUid()))){
+                    startActivity(new Intent(ChatInThread.this, MyAccount.class));
+            }else
+            {
+                Intent intent = new Intent(ChatInThread.this, ShowUserProfile.class);
+                intent.putExtra("authID",authId);
+                startActivity(intent);
+            }
         });
 
         databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Threads").child(threadId).child("comments");

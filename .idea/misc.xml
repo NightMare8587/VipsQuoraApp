@@ -3,14 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/drawable/edittext_back.xml" value="0.19895833333333332" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/drawable/shape.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/drawable/shape_second.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/activity_chat_in_thread.xml" value="0.24048913043478262" />
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/activity_chat_with_profile_user.xml" value="0.16875" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/activity_create_thread.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/activity_home.xml" value="0.245018115942029" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/activity_intro.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/activity_my_account.xml" value="0.2" />
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/activity_show_user_profile.xml" value="0.1828125" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/all_threads_fragment.xml" value="0.245018115942029" />
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/card_message_revive.xml" value="0.1828125" />
+        <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/card_message_send.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/comments_adapter.xml" value="0.24048913043478262" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/follow_card_view.xml" value="0.536" />
         <entry key="..\:/Users/91807/AndroidStudioProjects/VipsQuoraApp/app/src/main/res/layout/following_fragment.xml" value="0.245018115942029" />
