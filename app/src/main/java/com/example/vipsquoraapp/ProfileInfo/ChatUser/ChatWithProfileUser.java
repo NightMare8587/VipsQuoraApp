@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -43,6 +44,7 @@ public class ChatWithProfileUser extends AppCompatActivity {
     String URL = "https://fcm.googleapis.com/fcm/send";
     String authId;
     RecyclerView recyclerView;
+    boolean containsBad = false;
     Button sendME;
     EditText editText;
     List<String> time = new ArrayList<>();
@@ -50,6 +52,7 @@ public class ChatWithProfileUser extends AppCompatActivity {
     List<String> sendBy = new ArrayList<>();
     List<String> message = new ArrayList<>();
     LinearLayoutManager linearLayoutManager;
+    List<String> badWords;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,8 @@ public class ChatWithProfileUser extends AppCompatActivity {
         authId = getIntent().getStringExtra("authID");
         recyclerView = findViewById(R.id.messageRecyclerView);
         sendME = findViewById(R.id.sendMessageButton);
+        badWords = new ArrayList<>();
+        initialise();
         linearLayoutManager = new LinearLayoutManager(this);
         editText = findViewById(R.id.sendMessageEditText);
         databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(Objects.requireNonNull(auth.getUid()));
@@ -119,57 +124,86 @@ public class ChatWithProfileUser extends AppCompatActivity {
         sendME.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                containsBad = false;
                 if(editText.getText().toString().length() == 0){
                     Toast.makeText(ChatWithProfileUser.this, "Enter Some Text", Toast.LENGTH_SHORT).show();
                     return;
-                }else{
-                    RequestQueue requestQueue = Volley.newRequestQueue(ChatWithProfileUser.this);
-                    JSONObject main = new JSONObject();
-                    try{
-                        main.put("to","/topics/"+authId+"");
-                        JSONObject notification = new JSONObject();
-                        notification.put("title","New Message");
-                        notification.put("body",""+editText.getText().toString().trim());
-                        main.put("notification",notification);
-
-                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, main, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getApplicationContext(), error.getLocalizedMessage()+"null", Toast.LENGTH_SHORT).show();
-                            }
-                        }){
-                            @Override
-                            public Map<String, String> getHeaders() throws AuthFailureError {
-                                Map<String,String> header = new HashMap<>();
-                                header.put("content-type","application/json");
-                                header.put("authorization","key=AAAArvsdfj8:APA91bEJ8DpObwwfGHTFd_IdYxwD-rFx3bkD-SDIahld6WG2WvTNEh5pVX8Xhmcz3XSYsnxtmJ3ZCg3UaS42CzCltIaAB2ZRZbs9hOja3tIqyPdd2Nt8zRemfQMJNqWq6fQv9OTiIHl5");
-                                return header;
-                            }
-                        };
-
-                        requestQueue.add(jsonObjectRequest);
+                }
+                else{
+                    String  inputString = editText.getText().toString();
+                    for(int i=0;i<badWords.size();i++){
+                        String word = badWords.get(i);
+                        if(inputString.toLowerCase().contains(word)){
+                            containsBad = true;
+                            Toast.makeText(ChatWithProfileUser.this, "We don't allow bad words in our app", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
                     }
-                    catch (Exception e){
-                        Toast.makeText(getApplicationContext(), e.getLocalizedMessage()+"null", Toast.LENGTH_SHORT).show();
-                    }
-                    SharedPreferences preferences = getSharedPreferences("AccountInfo",MODE_PRIVATE);
-                    String currentTime = System.currentTimeMillis() + "";
-                    chat chat = new chat(editText.getText().toString().trim(),auth.getUid()+"",currentTime+"","0",preferences.getString("name",""));
-                    databaseReference.child("messages").child(authId).child(System.currentTimeMillis()+"").setValue(chat);
-                    databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(authId);
-                    databaseReference.child("messages").child(Objects.requireNonNull(auth.getUid())).child(currentTime+"").setValue(chat);
-                    editText.setText("");
-                    databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(Objects.requireNonNull(auth.getUid()));
+                    checkIfBadOrNot();
 
-                    updateChat();
                 }
             }
         });
+    }
+
+    private void checkIfBadOrNot() {
+        if(!containsBad) {
+            RequestQueue requestQueue = Volley.newRequestQueue(ChatWithProfileUser.this);
+            JSONObject main = new JSONObject();
+            try {
+                main.put("to", "/topics/" + authId + "");
+                JSONObject notification = new JSONObject();
+                notification.put("title", "New Message");
+                notification.put("body", "" + editText.getText().toString().trim());
+                main.put("notification", notification);
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, main, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getLocalizedMessage() + "null", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> header = new HashMap<>();
+                        header.put("content-type", "application/json");
+                        header.put("authorization", "key=AAAArvsdfj8:APA91bEJ8DpObwwfGHTFd_IdYxwD-rFx3bkD-SDIahld6WG2WvTNEh5pVX8Xhmcz3XSYsnxtmJ3ZCg3UaS42CzCltIaAB2ZRZbs9hOja3tIqyPdd2Nt8zRemfQMJNqWq6fQv9OTiIHl5");
+                        return header;
+                    }
+                };
+
+                requestQueue.add(jsonObjectRequest);
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getLocalizedMessage() + "null", Toast.LENGTH_SHORT).show();
+            }
+            SharedPreferences preferences = getSharedPreferences("AccountInfo", MODE_PRIVATE);
+            String currentTime = System.currentTimeMillis() + "";
+            chat chat = new chat(editText.getText().toString().trim(), auth.getUid() + "", currentTime + "", "0", preferences.getString("name", ""));
+            databaseReference.child("messages").child(authId).child(System.currentTimeMillis() + "").setValue(chat);
+            databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(authId);
+            databaseReference.child("messages").child(Objects.requireNonNull(auth.getUid())).child(currentTime + "").setValue(chat);
+            editText.setText("");
+            databaseReference = FirebaseDatabase.getInstance().getReference().getRoot().child("Users").child(Objects.requireNonNull(auth.getUid()));
+
+            updateChat();
+        }
+    }
+
+    private void initialise() {
+        badWords.add("fuck");
+        badWords.add("lodu");
+        badWords.add("chutiya");
+        badWords.add("madarchod");
+        badWords.add("bc");
+        badWords.add("mc");
+        badWords.add("bhenchod");
+        badWords.add("suar");
+        badWords.add("randi");
     }
 
     private void updateChat() {
