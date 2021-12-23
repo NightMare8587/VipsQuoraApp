@@ -17,13 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.vipsquoraapp.Account.MyAccount;
-import com.example.vipsquoraapp.ProfileInfo.ChatUser.ChatWithProfileUser;
 import com.example.vipsquoraapp.ProfileInfo.ShowUserProfile;
 import com.example.vipsquoraapp.R;
 import com.example.vipsquoraapp.Threads.FollowThreads.FollowThread;
