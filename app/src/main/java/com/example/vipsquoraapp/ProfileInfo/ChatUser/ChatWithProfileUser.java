@@ -126,7 +126,6 @@ public class ChatWithProfileUser extends AppCompatActivity {
                 containsBad = false;
                 if(editText.getText().toString().length() == 0){
                     Toast.makeText(ChatWithProfileUser.this, "Enter Some Text", Toast.LENGTH_SHORT).show();
-                    return;
                 }
                 else{
                     String  inputString = editText.getText().toString();
@@ -139,7 +138,6 @@ public class ChatWithProfileUser extends AppCompatActivity {
                         }
                     }
                     checkIfBadOrNot();
-
                 }
             }
         });
@@ -203,6 +201,7 @@ public class ChatWithProfileUser extends AppCompatActivity {
         badWords.add("bhenchod");
         badWords.add("suar");
         badWords.add("randi");
+        badWords.add("lochan");
     }
 
     private void updateChat() {
