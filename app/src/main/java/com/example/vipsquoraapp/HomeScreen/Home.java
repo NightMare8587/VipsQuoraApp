@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.vipsquoraapp.Account.MyAccount;
+import com.example.vipsquoraapp.HomeScreen.Chat.ChatsActivity;
 import com.example.vipsquoraapp.HomeScreen.Fragments.MyAdapter;
 import com.example.vipsquoraapp.R;
 import com.google.android.material.tabs.TabLayout;
@@ -74,7 +75,7 @@ public class Home extends AppCompatActivity {
         if(id == R.id.notification)
             startActivity(new Intent(Home.this, MyAccount.class));
         else
-            startActivity(new Intent(Home.this, MyAccount.class));
+            startActivity(new Intent(Home.this, ChatsActivity.class));
         return super.onOptionsItemSelected(item);
     }
 }
