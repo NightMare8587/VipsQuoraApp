@@ -128,7 +128,7 @@ public class ChatWithProfileUser extends AppCompatActivity {
                     Toast.makeText(ChatWithProfileUser.this, "Enter Some Text", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    String  inputString = editText.getText().toString();
+                    String  inputString = editText.getText().toString().trim();
                     for(int i=0;i<badWords.size();i++){
                         String word = badWords.get(i);
                         if(inputString.toLowerCase().contains(word)){

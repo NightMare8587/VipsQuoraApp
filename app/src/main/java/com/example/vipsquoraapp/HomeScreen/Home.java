@@ -73,7 +73,8 @@ public class Home extends AppCompatActivity {
 
         if(id == R.id.notification)
             startActivity(new Intent(Home.this, MyAccount.class));
-
+        else
+            startActivity(new Intent(Home.this, MyAccount.class));
         return super.onOptionsItemSelected(item);
     }
 }
